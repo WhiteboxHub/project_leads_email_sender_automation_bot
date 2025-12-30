@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+logs/
+node_modules/
+email_accounts.json
+leads_emails.csv
+
+
+
+
