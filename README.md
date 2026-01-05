@@ -1,61 +1,43 @@
-# Leads Mass Email Sender
+# Leads Email Sender Automation
 
-This program sends mass emails to leads from a MySQL database using a rotating pool of email accounts.
+Mass outreach bot with automated WBL activity logging.
 
-## Prerequisites
+## 🚀 Quick Start
 
-- Python 3.x
-- MySQL database
-- Required packages: python-dotenv, mysql-connector-python, smtplib (built-in), csv (built-in), email (built-in), datetime (built-in), os (built-in)
+1. **Setup Environment**:
 
-## Setup
-
-1. Ensure all files are in the same directory:
-   - `main.py`
-   - `.env`
-   - `email_accounts.json`
-   - `logs/` directory
-
-2. Configure your environment variables in `.env`:
-   - `DB_HOST=your-db-host`
-   - `DB_USER=your-db-user`
-   - `DB_PASS=your-db-password`
-   - `DB_NAME=your-db-name`
-   - `EMAIL_ACCOUNTS_FILE=email_accounts.json`
-   - `SMTP_SERVER=smtp.gmail.com`
-   - `SMTP_PORT=587`
-   - `REPLY_TO_EMAIL=your-reply-email@example.com`
-
-3. Update `email_accounts.json` with your email accounts in the format:
-   ```json
-   [
-     {
-       "EMAIL_USER": "your-email@gmail.com",
-       "EMAIL_PASS": "your-app-password"
-     }
-   ]
+   ```bash
+   python -m venv venv
+   # Windows: venv\Scripts\activate | Mac: source venv/bin/activate
+   pip install -r requirements.txt
    ```
 
-4. Ensure your MySQL database has a `lead` table with columns: `id`, `full_name`, `email`, `massemail_unsubscribe`, `massemail_email_sent`
+2. **Configure API & Env**:
 
-## Running the Program
+   ```bash
+   python setup_api.py
+   ```
 
-```bash
-python main.py
-```
+   _Follow prompts for WBL Email, Password, and Employee ID._
 
-## Expected Output
+3. **Add Email Accounts**:
+   Update `email_accounts.json` with your Gmail address and **App Password**.
 
-- Connects to database and fetches up to 800 leads that haven't been emailed and aren't unsubscribed
-- Cycles through email accounts (up to 100 emails per account)
-- Sends HTML emails with unsubscribe links
-- Updates database to mark emails as sent
-- Logs sent emails to `logs/sent_emails.csv`
-- Prints sending status for each email
+   > [!IMPORTANT]
+   > Use a [Gmail App Password](https://support.google.com/accounts/answer/185833), not your regular password.
 
-## Notes
+4. **Run Bot**:
+   ```bash
+   python main.py
+   ```
 
-- Uses Gmail SMTP by default
-- Automatically switches accounts when limit is reached
-- Skips leads with invalid emails
-- Only sends to leads where `massemail_unsubscribe != 1` and `massemail_email_sent != 1`
+## 📂 Project Structure
+
+- `main.py`: The main automation script.
+- `leads_emails.csv`: Put your leads here (`email`, `full_name` headers).
+- `logs/`: Check `sent_emails.csv` for delivery status.
+
+## � Pro Tips
+
+- **Delay**: Adjusted via `EMAIL_DELAY_SECONDS` in `.env`.
+- **Errors**: If you get a "WebLoginRequired" error, ensure 2FA is on and you're using an App Password.
