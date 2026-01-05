@@ -177,10 +177,9 @@ def run():
     leads_to_email = []
     for row in all_rows:
         # Check conditions: massemail_unsubscribe != 1 (True) AND massemail_email_sent != 1 (True)
-        # CSV values are strings "True"/"False" based on inspection
-        # Adjust logic to match the file's boolean string format
-        is_unsubscribed = row.get("Mass Email Unsubscribe", "False") == "True"
-        is_sent = row.get("Mass Email Sent", "False") == "True"
+        # CSV values are strings "1"/"0"
+        is_unsubscribed = row.get("massemail_unsubscribe", "0") == "1"
+        is_sent = row.get("massemail_email_sent", "0") == "1"
         
         if not is_unsubscribed and not is_sent:
             leads_to_email.append(row)
@@ -197,8 +196,8 @@ def run():
     successful_sends = 0
 
     for lead in leads_to_process:
-        email = lead.get("Email", "").strip()
-        name = lead.get("Full Name", "").strip()
+        email = lead.get("email", "").strip()
+        name = lead.get("full_name", "").strip()
 
         if not email or '@' not in email:
             print(f"Skipping invalid email: {email}")
@@ -208,7 +207,7 @@ def run():
             sender_email = send_email(email, name)
             
             # Update status in memory
-            lead["Mass Email Sent"] = "True"
+            lead["massemail_email_sent"] = "1"
             # Note: "last_modified" column logic from SQL is skipped as it doesn't appear to be in CSV headers 
             # (only "Entry Date", "Closed Date" etc are present). We only verify Sent flag.
 
